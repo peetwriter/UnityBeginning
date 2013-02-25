@@ -1,4 +1,6 @@
 private var motor : CharacterMotor;
+var rotationSpeed : float = 20.0;
+private var rotationSensivity = 0.1;
 
 // Use this for initialization
 function Awake () {
@@ -28,11 +30,22 @@ function Update () {
 		// Multiply the normalized direction vector by the modified length
 		directionVector = directionVector * directionLength;
 	}
+
+	
 	
 	// Apply the direction to the CharacterMotor
 	motor.inputMoveDirection = transform.rotation * directionVector;
 	motor.inputJump = Input.GetButton("Jump");
 }
+
+function FixedUpdate(){
+		if (Input.GetAxis("Turn")){
+			var rotation : float  = (Input.GetAxis("Turn")) * rotationSpeed * rotationSensivity;
+			rotation = rotation + transform.eulerAngles.y ; 
+			transform.localRotation = Quaternion.AngleAxis(rotation, Vector3.up);
+		}
+}
+
 
 // Require a character controller to be attached to the same game object
 @script RequireComponent (CharacterMotor)
